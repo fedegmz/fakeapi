@@ -34,4 +34,6 @@ Route::middleware([
     })->name('dashboard');
 });
 
-
+Route::get('/test', function (){
+    return Inertia::render('Test');
+});
