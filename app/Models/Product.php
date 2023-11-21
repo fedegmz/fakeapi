@@ -13,4 +13,10 @@ class Product extends Model
     protected $casts = [
         'images' => 'array',
     ];
+
+    // relacion uno a muchos
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
