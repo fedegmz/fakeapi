@@ -1,3 +1,5 @@
+
+
 <template>
     <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
         <div class="pt-4 bg-gray-100 dark:bg-gray-900">
@@ -25,68 +27,81 @@
                             <ul
                                 class="font-medium flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50  dark:bg-gray-800  dark:border-gray-700">
                                 <li>
-                                    <a href="#" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded  dark:text-white"
-                                        aria-current="page">Home</a>
+                                    <NavLink :href="route('introduction')"
+                                        class="block w-full py-2 pl-3 pr-4 text-white bg-blue-700 rounded  dark:text-white text-sm">
+                                        Introducción
+                                    </NavLink>
                                 </li>
                                 <li>
-                                    <a href="#"
-                                        class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">About</a>
+                                    <NavLink :href="route('products')"
+                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                        Productos
+                                    </NavLink>
+
                                 </li>
                                 <li>
-                                    <a href="#"
-                                        class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">Services</a>
+                                    <NavLink :href="route('hi')"
+                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                        Filtro de Productos
+                                    </NavLink>
+
                                 </li>
                                 <li>
-                                    <a href="#"
-                                        class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">Pricing</a>
+                                    <NavLink :href="route('hi')"
+                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                        Categorias
+                                    </NavLink>
                                 </li>
                                 <li>
-                                    <a href="#"
-                                        class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">Contact</a>
+                                    <NavLink :href="route('hi')"
+                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                        Usuarios
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink :href="route('hi')"
+                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                        Auth JWT
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink :href="route('hi')"
+                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                        Files
+                                    </NavLink>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </nav>
 
+                <!-- <div class="content max-w-screen-xl mx-auto p-4" v-html="content"> -->
+                <div class="content max-w-screen-xl mx-auto p-4">
+                    <ContentComponent v-for="content in contents" :key="content.id" :content="content" />
+                </div>
             </div>
         </div>
     </div>
-    <pre>
-        <code class="language-json">
-            [
-                {
-                    "id": 4,
-                    "title": "Handmade Fresh Table",
-                    "price": 687,
-                    "description": "Andy shoes are designed to keeping in...",
-                    "category": {
-                    "id": 5,
-                    "name": "Others",
-                    "image": "https://placeimg.com/640/480/any?r=0.591926261873231"
-                    },
-                    "images": [
-                    "https://placeimg.com/640/480/any?r=0.9178516507833767",
-                    "https://placeimg.com/640/480/any?r=0.9300320592588625",
-                    "https://placeimg.com/640/480/any?r=0.8807778235430017"
-                    ]
-                }
-                // ...
-            ]
-    </code></pre>
-
 </template>
 
 <script>
+import NavLink from '@/Components/NavLink.vue';
 //   import Prism from 'vue-prismjs'
 // import 'prismjs/themes/prism-funky.css'  
 // import 'prismjs/themes/prism.css'
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css'; // Cambia el tema según tus preferencias
 import 'prismjs/components/prism-json.js'; // Importa el idioma JSON
+import ContentComponent from '@/Components/ContentsComponent.vue';
 
-  
+
+
 export default {
+
+    props: {
+        contents: Array,
+    },
+
     data() {
         return {
             showMenu: false,
@@ -100,11 +115,14 @@ export default {
     },
 
     mounted() {
-    window.Prism = window.Prism || {};
-    window.Prism.manual = true;
-    Prism.highlightAll(); // highlight your code on mount
-  }
-
+        window.Prism = window.Prism || {};
+        window.Prism.manual = true;
+        Prism.highlightAll(); // highlight your code on mount
+    },
+    components: {
+        NavLink,
+        ContentComponent
+    }
 };
 
 </script>

@@ -1,3 +1,4 @@
+
 <script setup>
 import Navbar from '@/Components/Navbar.vue';
 import { Head } from '@inertiajs/vue3';
@@ -8,7 +9,6 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Privacy Policy" />
-
-                    <Navbar />
+      <Head title="Tester" />
+      <Navbar :content="'<h1>Hola desde Test2.vue</h1>'" /> <!-- Pasamos HTML como una prop -->
 </template>
