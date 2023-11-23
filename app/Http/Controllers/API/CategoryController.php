@@ -5,9 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -18,25 +18,22 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::all();
-            return $this->returnJson(true, 200, 'Categories listed successfully', $category);
+            return $this->returnJson(true, 200, 'Categories listed successfully', CategoryResource::collection($category));
         } catch (\Throwable $e) {
             // La excepción específica para cuando el modelo no se encuentra
             throw new ApiException('Categories not found', 404);
         }
-
-        
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(CategoryRequest $request)
-{
-    $category = Category::create($request->all());
+    {
+        $category = Category::create($request->all());
 
-    return $this->returnJson(true, 201, 'Category created successfully', $category);
-}
-
+        return $this->returnJson(true, 201, 'Category created successfully', CategoryResource::make($category));
+    }
 
     /**
      * Display the specified resource.
@@ -44,13 +41,13 @@ class CategoryController extends Controller
     public function show(int $id)
     {
 
-       try {
+        try {
             $category = Category::findOrFail($id);
-            return $this->returnJson(true, 200, 'Category retrieved successfully', $category);
+            return $this->returnJson(true, 200, 'Category retrieved successfully', CategoryResource::make($category));
         } catch (\Throwable $e) {
             // La excepción específica para cuando el modelo no se encuentra
             throw new ApiException('Category not found', 404);
-       }
+        }
 
     }
 
@@ -60,14 +57,14 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, int $id)
     {
 
-       try{
+        try {
             $category = Category::findOrFail($id);
             $category->update($request->all());
-            return $this->returnJson(true, 200, 'Category updated successfully', $category);
+            return $this->returnJson(true, 200, 'Category updated successfully', CategoryResource::make($category));
         } catch (\Throwable $e) {
             // La excepción específica para cuando el modelo no se encuentra
             throw new ApiException('Category not found', 404);
-       }
+        }
     }
 
     /**
@@ -88,8 +85,8 @@ class CategoryController extends Controller
     public function findProductByCategory(int $id)
     {
         try {
-           $products = Category::findOrFail($id)->products;
-            return $this->returnJson(true, 200, 'Products listed successfully', $products);
+            $products = Category::findOrFail($id)->products;
+            return $this->returnJson(true, 200, 'Products listed successfully', ProductResource::collection($products));
         } catch (\Throwable $e) {
             // La excepción específica para cuando el modelo no se encuentra
             throw new ApiException('Category not found', 404);
