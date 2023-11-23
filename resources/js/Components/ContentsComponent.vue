@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="text-lg">
     <h1 class="text-5xl strong" v-if="content.title">{{ content.title }}</h1>
     <hr class="bg-gray-800 my-4" v-if="content.hr">
     <h1 class="text-4xl pt-2">{{ content.subTitle }}</h1>
-    <p class="text-gray-300 pt-2">{{ content.description }} </p>
+    <p class="text-gray-300 pt-2" v-html="content.description"></p>
 
     <p class="text-gray-300 pt-2 pb-2">Request </p>
 
@@ -15,11 +15,7 @@
         </button>
       </div>
 
-      <pre :class="{'h-20': content.style, 'whitespace-pre flex-grow flex justify-start items-center': true}">
-        <code class="language-json">
-          {{ content.uri }}
-        </code>
-      </pre>
+      <pre :class="{'h-20': content.style, 'whitespace-pre flex-grow flex justify-start items-center': true}"><code class="language-json">{{ content.uri }}</code></pre>
     </div>
 
     <p class="text-gray-300 pt-2 pb-2">Response: </p>
@@ -39,6 +35,10 @@
 
     <div class="p-4 mt-4 border-l-2 pl-2" v-if="content.note">
       {{ content.note }}
+    </div>
+
+    <div class="pt-4" v-if="content.extra" v-html="content.extra">
+     
     </div>
   </div>
 </template>
