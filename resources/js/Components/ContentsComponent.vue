@@ -5,9 +5,9 @@
     <h1 class="text-4xl pt-2">{{ content.subTitle }}</h1>
     <p class="text-gray-300 pt-2" v-html="content.description"></p>
 
-    <p class="text-gray-300 pt-2 pb-2">Request </p>
+    <p class="text-gray-300 pt-2 pb-2" v-if="content.uri">Request </p>
 
-    <div class="bg-customGray flex flex-row-reverse h-auto" @mouseover="showCopyIconRequest = true" @mouseout="resetIcon">
+    <div class="bg-customGray flex flex-row-reverse h-auto" @mouseover="showCopyIconRequest = true" @mouseout="resetIcon" v-if="content.uri">
       <div>
         <button v-show="showCopyIconRequest" class="border-2 border-gray-600 h-7 w-6 mt-2 mr-2" @click="copyCode(content.uri)" title="Copiar contenido">
           <i v-if="copied" class="fa-solid fa-check text-green-400"></i>
@@ -18,9 +18,9 @@
       <pre :class="{'h-20': content.style, 'whitespace-pre flex-grow flex justify-start items-center': true}"><code class="language-json">{{ content.uri }}</code></pre>
     </div>
 
-    <p class="text-gray-300 pt-2 pb-2">Response: </p>
+    <p class="text-gray-300 pt-2 pb-2" v-if="content.code">Response: </p>
 
-    <div class="bg-customGray pb-4 flex flex-row-reverse" @mouseover="showCopyIconCode = true" @mouseout="resetIcon">
+    <div class="bg-customGray pb-4 flex flex-row-reverse" @mouseover="showCopyIconCode = true" @mouseout="resetIcon" v-if="content.code">
       <button v-show="showCopyIconCode" class="border-2 border-gray-600 h-7 w-6 mt-2 mr-2" @click="copyCode(content.code)" title="Copiar contenido">
         <i v-if="copied" class="fa-solid fa-check text-green-400"></i>
         <i v-else class="fa-regular fa-copy text-gray-600"></i>
