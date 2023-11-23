@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -13,109 +16,93 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        try {
+            $category = Category::all();
+            return $this->returnJson(true, 200, 'Categories listed successfully', $category);
+        } catch (\Throwable $e) {
+            // La excepción específica para cuando el modelo no se encuentra
+            throw new ApiException('Categories not found', 404);
+        }
 
-        return response()->json([
-            'success' => true,
-            'status' => 200,
-            'message' => 'Categories listed successfully',
-            'data' => $categories,
-        ], 200);
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $category = Category::create($request->all());
+    public function store(CategoryRequest $request)
+{
+    $category = Category::create($request->all());
 
-        return response()->json([
-            'success' => true,
-            'status' => 201,
-            'message' => 'Category created successfully',
-            'data' => $category,
-        ], 201);
+    return $this->returnJson(true, 201, 'Category created successfully', $category);
+}
 
-    }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        $category =  Category::find($id);
 
-        return response()->json([
-            'success' => true,
-            'status' => 200,
-            'message' => 'Category retrieved successfully',
-            'data' => $category,
-        ], 200);
+       try {
+            $category = Category::findOrFail($id);
+            return $this->returnJson(true, 200, 'Category retrieved successfully', $category);
+        } catch (\Throwable $e) {
+            // La excepción específica para cuando el modelo no se encuentra
+            throw new ApiException('Category not found', 404);
+       }
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, int $id)
     {
-        $category = Category::find($id);
-        if (!$category) {
-            return response()->json([
-                'success' => false,
-                'status' => 404,
-                'message' => 'Category not found',
-            ], 404);
-        }
-        $category->update($request->all());
 
-        return response()->json([
-            'success' => true,
-            'status' => 200,
-            'message' => 'Category updated successfully',
-            'data' => $category,
-        ], 200);
+       try{
+            $category = Category::findOrFail($id);
+            $category->update($request->all());
+            return $this->returnJson(true, 200, 'Category updated successfully', $category);
+        } catch (\Throwable $e) {
+            // La excepción específica para cuando el modelo no se encuentra
+            throw new ApiException('Category not found', 404);
+       }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $category = Category::find($id);
-        if (!$category) {
-            return response()->json([
-                'success' => false,
-                'status' => 404,
-                'message' => 'Category not found',
-            ], 404);
+        try {
+            $category = Category::findOrFail($id);
+            $category->delete();
+            return $this->returnJson(true, 200, 'Category deleted successfully', null);
+        } catch (\Throwable $e) {
+            // La excepción específica para cuando el modelo no se encuentra
+            throw new ApiException('Category not found', 404);
         }
-        $category->delete();
-        return response()->json([
-            'success' => true,
-            'status' => 200,
-            'message' => 'Category deleted successfully',
-        ], 200);
     }
 
     public function findProductByCategory(int $id)
     {
-        $category = Category::find($id);
-        if (!$category) {
-            return response()->json([
-                'success' => false,
-                'status' => 404,
-                'message' => 'Category not found',
-            ], 404);
+        try {
+           $products = Category::findOrFail($id)->products;
+            return $this->returnJson(true, 200, 'Products listed successfully', $products);
+        } catch (\Throwable $e) {
+            // La excepción específica para cuando el modelo no se encuentra
+            throw new ApiException('Category not found', 404);
         }
-        $products = $category->products()->get();
+    }
 
+    public function returnJson($success, $status, $message, $data)
+    {
         return response()->json([
-            'success' => true,
-            'status' => 200,
-            'message' => 'Products retrieved successfully',
-            'data' => $products,
-        ], 200);
+            'success' => $success,
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $status);
     }
 }

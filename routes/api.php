@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,8 @@ Route::prefix('v1')->group(function () {
     Route::get('categories/{id}/products', [CategoryController::class, 'findProductByCategory'])
             ->name('categories.products');
     Route::apiResource('categories', CategoryController::class);
+
+    Route::apiResource('users', UserController::class);
+    Route::post('users/email-is-available', [UserController::class, 'verifyEmail'])
+            ->name('users.email-is-available');
 });

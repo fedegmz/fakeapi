@@ -27,4 +27,39 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * Render an exception into an HTTP response.
+     */
+    public function render($request, Throwable $exception)
+    {
+        $id = $request->segment(count($request->segments()));
+
+        if (!is_numeric($id)) {
+            return response()->json([
+                'success' => false,
+                'status' => 400,
+                'error' => [
+                    'code' => 'INVALID_ID',
+                    'message' => 'ID must be an integer',
+                ],
+            ], 400);
+        }
+        
+        if ($exception instanceof ApiException) {
+            return response()->json([
+                'success' => false,
+                'status' => $exception->getStatusCode(),
+                'error' => [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ],
+            ], $exception->getStatusCode());
+        }
+        
+        return parent::render($request, $exception);
+    }
+    
+
+    
 }

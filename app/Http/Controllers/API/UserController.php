@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -12,7 +14,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+
+        return response()->json([
+            'success' => true,
+            'status' => 200,
+            'message' => 'Users listed successfully',
+            'data' => $users,
+        ], 200);
     }
 
     /**
@@ -20,7 +29,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $users = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status' => 201,
+            'message' => 'User created successfully',
+            'data' => $users,
+        ], 201);
     }
 
     /**
@@ -28,7 +48,14 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $users = User::find($id);
+
+        return response()->json([
+            'success' => true,
+            'status' => 200,
+            'message' => 'User retrieved successfully',
+            'data' => $users,
+        ], 200);
     }
 
     /**
@@ -36,7 +63,28 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'status' => 404,
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        $input = $request->only(['name', 'email', 'password']);
+        if (isset($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        }
+    
+        $user->fill($input)->save();
+    
+        return response()->json([
+            'success' => true,
+            'status' => 200,
+            'message' => 'User updated successfully',
+            'data' => $user,
+        ], 200);
     }
 
     /**
@@ -45,5 +93,24 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'status' => 404,
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'status' => 200,
+            'message' => 'User found',
+            'data' => $user,
+        ], 200);
     }
 }
