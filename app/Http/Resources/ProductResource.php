@@ -27,16 +27,12 @@ class ProductResource extends JsonResource
         }
 
         return [
-            'success' => true,
-            'status' => 200,
-            'data' => [
-                'id'=> $this->id,
-                'title' => $this->title,
-                'price' => $this->price,
-                'description' => $this->description,
-                'category' => Category::find($this->category_id),
-                'images' => $this->images,
-            ],
+            'id' => $this->id,
+            'title' => $this->title,
+            'price' => $this->price,
+            'description' => $this->description,
+            'category' => Category::find($this->category_id),
+            'images' => $this->images,
         ];
     }
 }

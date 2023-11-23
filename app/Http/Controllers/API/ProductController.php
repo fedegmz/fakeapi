@@ -14,9 +14,16 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResource
+    public function index(Request $request)
     {
-        return ProductResource::collection(Product::all());
+       
+            return $this->returnJson(
+                true,
+                200,
+                'Products listed successfully',
+                $request->has('limit') ? ProductResource::collection(Product::skip($request->offset)->take($request->limit)->get())
+                                       : ProductResource::collection(Product::all())
+            );
     }
 
     /**
@@ -45,7 +52,7 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $product = Product::find($id);
-        if(!$product){
+        if (!$product) {
             return response()->json([
                 'success' => false,
                 'status' => 404,
@@ -78,5 +85,55 @@ class ProductController extends Controller
         ], 200);
     }
 
-    
+    public function search(Request $request)
+    {
+
+        //array de filtros
+        $filters = [
+            'title' => function ($query, $value) {
+                $query->where('title', 'like', '%' . $value . '%');
+            },
+            'price' => function ($query, $value) {
+                $query->where('price', $value);
+            },
+            'price_min' => function ($query, $value) use ($request) {
+                if ($request->has('price_max')) {
+                    $query->whereBetween('price', [$value, $request->price_max]);
+                }
+            },
+            'categoryId' => function ($query, $value) {
+                $query->where('category_id', $value);
+            },
+            'offset' => function ($query, $value) use ($request) {
+                if ($request->has('limit')) {
+                    $query->offset($value)->limit($request->limit);
+                }
+            },
+        ];
+
+        $query = Product::query();
+
+        //recorremos los filtros del array y si existe el filtro en la request
+        //ejecutamos la funcion del array pasandole el query y el valor del filtro
+        //si no existe el filtro en la request no se ejecuta nada
+        foreach ($filters as $filter => $action) {
+            if ($request->has($filter)) {
+                $action($query, $request->$filter);
+            }
+        }
+
+        $products = $query->get();
+        return ProductResource::collection($products);
+
+    }
+
+    public function returnJson($success, $status, $message, $data)
+    {
+        return response()->json([
+            'success' => $success,
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $status);
+    }
 }
