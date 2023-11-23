@@ -113,4 +113,14 @@ class UserController extends Controller
             'data' => $user,
         ], 200);
     }
+
+    public function returnJson($success, $status, $message, $data)
+    {
+        return response()->json([
+            'success' => $success,
+            'status' => $status,
+            'message' => $message,
+            'data' => $data,
+        ], $status);
+    }
 }
