@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,12 +24,16 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'email|required|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'profile_photo_url' => 'nullable|string|max:255'
-        ];
+        //get user id from url
+        $userId = $this->segment(4);
+        $userIds = $this->route('id');
+        
+        $rules['name'] = $userId ? ['string', 'max:255'] : ['required', 'string', 'max:255'];
+        $rules['email'] = $userId ? ['string', 'email', 'max:255', Rule::unique('users')->ignore($userIds)] : ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($userIds)];
+        $rules['password'] = $userId ? ['string', 'min:8', 'confirmed'] : ['required', 'string', 'min:8', 'confirmed'];
+        $rules['profile_photo_path'] = ['nullable', 'string', 'max:255'];
+
+        return $rules;
     }
 
     protected function  failedValidation(Validator $validator)
