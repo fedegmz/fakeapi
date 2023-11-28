@@ -1,5 +1,3 @@
-
-
 <template>
     <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
         <div class="pt-4 bg-gray-100 dark:bg-gray-900">
@@ -27,46 +25,46 @@
                             <ul
                                 class="font-medium flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50  dark:bg-gray-800  dark:border-gray-700">
                                 <li>
-                                    <NavLink :href="route('introduction')"
-                                        class="block w-full py-2 pl-3 pr-4 text-white bg-blue-700 rounded  dark:text-white text-sm">
+                                    <NavLink :href="route(routes.introduction)" 
+                                        :class="getNavLinkClass(routes.introduction)">
                                         Introducción
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink :href="route('products')"
-                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <NavLink :href="route(routes.products)"
+                                        :class="getNavLinkClass(routes.products)">
                                         Productos
                                     </NavLink>
 
                                 </li>
                                 <li>
-                                    <NavLink :href="route('hi')"
-                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <NavLink :href="route(routes.filterproducts)"
+                                        :class="getNavLinkClass(routes.filterproducts)">
                                         Filtro de Productos
                                     </NavLink>
 
                                 </li>
                                 <li>
-                                    <NavLink :href="route('hi')"
-                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <NavLink :href="route(routes.categories)"
+                                        :class="getNavLinkClass(routes.categories)">
                                         Categorias
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink :href="route('hi')"
-                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <NavLink :href="route(routes.users)"
+                                        :class="getNavLinkClass(routes.users)">
                                         Usuarios
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink :href="route('hi')"
-                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <NavLink :href="route(routes.authjwt)"
+                                        :class="getNavLinkClass(routes.authjwt)">
                                         Auth JWT
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink :href="route('hi')"
-                                        class="block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <NavLink :href="route(routes.files)"
+                                        :class="getNavLinkClass(routes.files)">
                                         Files
                                     </NavLink>
                                 </li>
@@ -98,27 +96,59 @@ import ContentComponent from '@/Components/ContentsComponent.vue';
 
 export default {
 
+    //props sirve para definir propiedades que se pueden usar en este componente y se pueden pasar desde el componente padre
     props: {
         contents: Array,
     },
 
+    //data sirve para definir datos que se pueden usar en este componente
     data() {
         return {
             showMenu: false,
-            code: 'npm install vue-prismjs --save'
+            code: 'npm install vue-prismjs --save',
+            currentUrl: window.location.href,
+            routes: {
+                
+                    introduction: 'introduction',
+                    products: 'products',
+                    filterproducts: 'filter-products',
+                    categories: 'categories',
+                    users: 'users',
+                    authjwt: 'auth-jwt',
+                    files: 'files',            
+                }
         };
     },
+    //methods sirve para definir métodos que se pueden usar en este componente
     methods: {
+        //metodo para mostrar o ocultar el menu
         toggleMenu() {
             this.showMenu = !this.showMenu;
-        }
+        },
+        //obtener la ruta actual y devolver el nombre de la ruta
+        getCurrentUrl() {
+            let uris = this.currentUrl.split('/');
+            let uri = uris[uris.length - 1];
+            return uri == '' ? 'introduction' : uri;
+        },
+        //comprobar si la ruta actual es la misma que la ruta de la barra de navegación actual y devolver la clase de estilo bg-blue-700 junto con otras clases de estilo
+        //esta va ligada con la función getCurrentUrl()
+        getNavLinkClass(routeName) {
+            return {
+                'bg-blue-700': this.getCurrentUrl() === routeName,
+                'block w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white': true,
+            };
+        },
     },
 
+    //mounted() se ejecuta cuando el DOM está listo, por lo que es seguro acceder a él en este punto.
     mounted() {
         window.Prism = window.Prism || {};
         window.Prism.manual = true;
         Prism.highlightAll(); // highlight your code on mount
+        //console.log(this.getCurrentUrl());
     },
+    //components sirve para importar componentes para usarlos en este componente
     components: {
         NavLink,
         ContentComponent

@@ -47,3 +47,22 @@ Route::get('/products', function(){
     return Inertia::render('Products');
 })->name('products');
 
+Route::get('filter-products', function(){
+    return Inertia::render('FilterProducts');
+})->name('filter-products');
+
+Route::get('categories', function(){
+    return Inertia::render('Categories');
+})->name('categories');
+
+Route::get('users', function(){
+    return Inertia::render('User');
+})->name('users');
+
+Route::get('auth-jwt', function(){
+    return Inertia::render('AuthJwt');
+})->name('auth-jwt');
+
+Route::get('files', function(){
+    return Inertia::render('Files');
+})->name('files');
