@@ -22,10 +22,15 @@ class CategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
-        ];
+        //get category id from url
+        $categoryId = $this->segment(4);
+        $rulesAll = ['required', 'string', 'max:255'];
+        $rulesAll = $categoryId ? array_diff($rulesAll, ['required']) : $rulesAll;
+        
+        $rules['name'] = $rulesAll;
+        $rules['image'] = $rulesAll;
+        
+        return $rules;
     }
 
     protected function  failedValidation(Validator $validator)
