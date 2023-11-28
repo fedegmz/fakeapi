@@ -38,11 +38,6 @@ Route::get('/', function (){
     return Inertia::render('Introduction');
 })->name('introduction');
 
-Route::get('/test2', function(){
-    return Inertia::render('Test2');
-})->name('hi');
-
-
 Route::get('/products', function(){
     return Inertia::render('Products');
 })->name('products');

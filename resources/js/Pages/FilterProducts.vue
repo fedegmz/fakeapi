@@ -2,6 +2,7 @@
 <script setup>
 import Navbar from '@/Components/Navbar.vue';
 import { Head } from '@inertiajs/vue3';
+import FilterProducts from '@/Components/FilterProductsContents';
 
 defineProps({
   policy: String,
@@ -18,7 +19,7 @@ export default {
 
   data() {
     return {
-      contents: '',
+      contents: FilterProducts,
     };
   }
 };
