@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
+use function Termwind\render;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -33,20 +35,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        $id = $request->segment(count($request->segments()));
-
-        if (!is_numeric($id)) {
-            return response()->json([
-                'success' => false,
-                'status' => 400,
-                'error' => [
-                    'code' => 'INVALID_ID',
-                    'message' => 'ID must be an integer',
-                ],
-            ], 400);
-        }
-        
+        //si se produce una excepción de tipo ApiException
         if ($exception instanceof ApiException) {
+            //get user id from url
+            $id = $request->segment(count($request->segments()));
+
+            //si el id no es un número
+            if (!is_numeric($id)) {
+                return response()->json([
+                    'success' => false,
+                    'status' => 400,
+                    'error' => [
+                        'code' => 'INVALID_ID',
+                        'message' => 'ID must be an integer',
+                    ],
+                ], 400);
+            }
             return response()->json([
                 'success' => false,
                 'status' => $exception->getStatusCode(),
@@ -55,6 +59,11 @@ class Handler extends ExceptionHandler
                     'message' => $exception->getMessage(),
                 ],
             ], $exception->getStatusCode());
+        }
+
+        //si se produce una excepción de tipo ApiJwtException
+        if ($exception instanceof ApiJwtException) {
+            return $exception->render($request);
         }
         
         return parent::render($request, $exception);

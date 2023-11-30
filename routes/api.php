@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
@@ -32,4 +33,8 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::post('users/email-is-available', [UserController::class, 'verifyEmail'])
             ->name('users.email-is-available');
+
+    Route::post('auth/login', [AuthController::class, 'login'])->name('login');
+    Route::get('auth/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::post ('auth/refresh-token', [AuthController::class, 'refreshToken'])->name('refreshToken');
 });
