@@ -2,8 +2,8 @@ export default [
   {
     title: 'Introducción',
     hr: true,
-    description: `<p> La API de Platzi Fake Store se puede utilizar con cualquier tipo de proyecto que necesite productos, usuarios, categorías, autenticación y usuarios en formato JSON. Puede utilizar esta API para crear prototipos de comercio electrónico y aprender cómo conectarse a una API con las mejores prácticas.</p>`,
-    extra: `<p>Para obtener más información, consulte la documentación de la API <a href="https://platzi-fake-store-api.herokuapp.com/docs/" target="_blank">aquí</a></p>
+    description: `<p> Esta actividad fue inspirada por la <a href="https://fakeapi.platzi.com/" target="_blank"><strong>API Platzi Fake Store</strong></a> el cual se puede utilizar con cualquier tipo de proyecto que necesite productos, usuarios, categorías, autenticación y usuarios en formato JSON.</p>`,
+    extra: `<p>Esta API incluye características como: </p>
             
             <ul class="ml-6 pt-4">
               <li type="disc">✅ Todas las operaciones CRUD</li>
