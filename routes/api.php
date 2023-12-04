@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,4 +38,7 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/login', [AuthController::class, 'login'])->name('login');
     Route::get('auth/profile', [AuthController::class, 'profile'])->name('profile');
     Route::post ('auth/refresh-token', [AuthController::class, 'refreshToken'])->name('refreshToken');
+
+    Route::get('files/{filename}', [FileController::class, 'show'])->name('files.show');
+    Route::post('files/upload', [FileController::class, 'upload'])->name('files.upload');
 });
