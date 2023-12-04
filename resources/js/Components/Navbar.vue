@@ -1,3 +1,4 @@
+ <!-- este es el componente de la barra de navegación -->
 <template>
     <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
         <div class="pt-4 bg-gray-100 dark:bg-gray-900">
@@ -75,6 +76,8 @@
 
                 <!-- <div class="content max-w-screen-xl mx-auto p-4" v-html="content"> -->
                 <div class="content max-w-screen-xl mx-auto p-4">
+                    <!-- aqui se renderiza el contenido de la ruta actual que se pasa como prop desde el 
+                    componente padre, ya se AuthJwt.vue, Products.vue, etc... culquier componente que use este componente -->
                     <ContentComponent v-for="content in contents" :key="content.id" :content="content" />
                 </div>
             </div>
@@ -83,6 +86,7 @@
 </template>
 
 <script>
+// importamos los componentes que necesitamos
 import NavLink from '@/Components/NavLink.vue';
 //   import Prism from 'vue-prismjs'
 // import 'prismjs/themes/prism-funky.css'  

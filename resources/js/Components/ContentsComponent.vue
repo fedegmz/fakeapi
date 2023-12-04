@@ -1,3 +1,4 @@
+ <!-- Componente para mostrar el contenido de la documentación -->
 <template>
   <div class="text-lg">
     <h1 class="text-5xl strong" v-if="content.title">{{ content.title }}</h1>
@@ -44,13 +45,17 @@
 </template>
 
 <script>
+//importamos los componentes que necesitamos
 import '@fortawesome/fontawesome-free/css/all.css'
 
 export default {
+  // Pasamos el contenido como una prop
   props: ['content'],
+  //mounted se ejecuta cuando el componente se ha montado en el DOM
   mounted() {
     console.log(this.content.code);
   },
+  //methods sirve para definir métodos que se pueden usar en este componente
   methods: {
     async copyCode(code) {
       try {
@@ -69,6 +74,7 @@ export default {
       this.copied = false;
     },
   },
+  //data sirve para definir datos que se pueden usar en este componente
   data() {
     return {
       copied: false,
