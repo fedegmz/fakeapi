@@ -23,11 +23,11 @@ class JwtRequest extends FormRequest
      */
     public function rules(): array
     {
-        $tknRefresh = $this->segment(4) == "refresh-token" ? ['required', 'string'] : ['string'];
+        $tknRefresh = $this->segment(4) == "refresh-token";
 
-        $rules['email'] = ['required', 'email'];
-        $rules['password'] = ['required', 'string', 'min:6'];
-        $rules['refreshTkn'] = $tknRefresh;
+        $rules['email'] = $tknRefresh ? [] : ['required', 'email'];
+        $rules['password'] = $tknRefresh ? [] : ['required', 'string', 'min:6'];
+        $rules['refresh_token'] = $tknRefresh ?  ['required', 'string'] : ['string'];
 
         return $rules;
     }

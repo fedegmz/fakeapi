@@ -99,13 +99,8 @@ export default [
     code: `
     {
       "success": false,
-      "status": 422,
-      "message": "Validation error",
-      "errors": {
-        "email": [
-          "The email has already been taken."
-        ]
-      }
+      "status": 400,
+      "message": "The email has already been taken."
     }
     `
   },

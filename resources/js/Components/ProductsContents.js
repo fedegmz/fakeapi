@@ -60,7 +60,7 @@ export default [
       "title": "New Product",
       "price": 10,
       "description": "A description",
-      "categoryId": 1,
+      "category_id": 1,
       "images": ["https://placeimg.com/640/480/any"]
     }
     `,
@@ -88,7 +88,7 @@ export default [
     subTitle: 'Actualizar un producto',
     description: 'Puedes actualizar un producto con el endpoint /products/{id}',
     uri: `
-    [PUT] http://127.0.0.1:8001/api/v1/products
+    [PUT] http://127.0.0.1:8001/api/v1/products/1201
     # Body
     {
       "title": "Change title",

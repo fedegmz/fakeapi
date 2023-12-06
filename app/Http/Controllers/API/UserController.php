@@ -98,18 +98,17 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             return response()->json([
-                'success' => false,
-                'status' => 404,
-                'message' => 'User not found',
-            ], 404);
+                'success' => true,
+                'status' => 200,
+                'message' => 'User not found, the email is disponible.',
+            ], 200);
         }
 
         return response()->json([
-            'success' => true,
-            'status' => 200,
-            'message' => 'User found',
-            'data' => $user,
-        ], 200);
+            'success' => false,
+            'status' => 400,
+            'message' => 'The email has already been taken.',            
+        ], 400);
     }
 
     public function returnJson($success, $status, $message, $data)

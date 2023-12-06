@@ -7,8 +7,8 @@ export default [
     uri: `[POST] http://127.0.0.1:8001/api/v1/auth/login
         # Cuerpo
         {
-          "email": "john@mail.com",
-          "password": "changeme"
+          "email": "nico@gmail.com",
+          "password": "1234@10129"
         }`,
     code: `
         {
@@ -41,7 +41,7 @@ export default [
     uri: `[POST] http://127.0.0.1:8001/api/v1/auth/refresh-token
 # Cuerpo
 {
-  "refreshToken": "{tu token de actualización}"
+  "refresh_token": "{tu token de actualización}"
 }`,
     code: `
 {
