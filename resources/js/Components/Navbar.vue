@@ -16,10 +16,8 @@
                                     d="M1 1h15M1 7h15M1 13h15" />
                             </svg>
                         </button>
-                        <a href="https://flowbite.com/" class="flex items-center">
-                            <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 mr-3" alt="Flowbite Logo" />
-                            <span
-                                class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+                        <a href="#" class="flex items-center">
+                            <img :src="logo" class="h-8 mr-3" alt="logo FDV" />
                         </a>
 
                         <div :class="{ 'hidden': !showMenu }" class="w-full" id="navbar-default">
@@ -78,7 +76,7 @@
                 <div class="content max-w-screen-xl mx-auto p-4">
                     <!-- aqui se renderiza el contenido de la ruta actual que se pasa como prop desde el 
                     componente padre, ya se AuthJwt.vue, Products.vue, etc... culquier componente que use este componente -->
-                    <ContentComponent v-for="content in contents" :key="content.id" :content="content" />
+                    <ContentComponent v-for="(content,index) in contents" :key="content.id" :content="content" :index="index" />
                 </div>
             </div>
         </div>
@@ -91,6 +89,7 @@ import NavLink from '@/Components/NavLink.vue';
 //   import Prism from 'vue-prismjs'
 // import 'prismjs/themes/prism-funky.css'  
 // import 'prismjs/themes/prism.css'
+import img from '../../assets/img/logo.png';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css'; // Cambia el tema según tus preferencias
 import 'prismjs/components/prism-json.js'; // Importa el idioma JSON
@@ -108,6 +107,7 @@ export default {
     //data sirve para definir datos que se pueden usar en este componente
     data() {
         return {
+            logo:img,
             showMenu: false,
             code: 'npm install vue-prismjs --save',
             currentUrl: window.location.href,
@@ -151,6 +151,7 @@ export default {
         window.Prism.manual = true;
         Prism.highlightAll(); // highlight your code on mount
         //console.log(this.getCurrentUrl());
+        console.log(this.logo);
     },
     //components sirve para importar componentes para usarlos en este componente
     components: {

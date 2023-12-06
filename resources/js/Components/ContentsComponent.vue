@@ -8,11 +8,10 @@
 
     <p class="text-gray-300 pt-2 pb-2" v-if="content.uri">Request </p>
 
-    <div class="bg-customGray flex flex-row-reverse h-auto" @mouseover="showCopyIconRequest = true" @mouseout="resetIcon" v-if="content.uri">
+    <div class="bg-customGray flex h-auto md:flex-row-reverse" @mouseenter="showCopyIconRequest = true" @mouseleave="resetIcon(`btn-${index+1}`)" v-if="content.uri">
       <div>
-        <button v-show="showCopyIconRequest" class="border-2 border-gray-600 h-7 w-6 mt-2 mr-2" @click="copyCode(content.uri)" title="Copiar contenido">
-          <i v-if="copied" class="fa-solid fa-check text-green-400"></i>
-          <i v-else class="fa-regular fa-copy text-gray-600"></i>
+        <button :class="`border-2 border-gray-600 h-7 w-6 mt-2 mr-2 btn-${index+1} ${!showCopyIconRequest ? 'block md:hidden' : 'block'}`" @click="copyCode(content.uri, `btn-${index+1}`)" title="Copiar contenido">
+          <i class="fa-regular fa-copy text-gray-600"></i>
         </button>
       </div>
 
@@ -21,10 +20,9 @@
 
     <p class="text-gray-300 pt-2 pb-2" v-if="content.code">Response: </p>
 
-    <div class="bg-customGray pb-4 flex flex-row-reverse" @mouseover="showCopyIconCode = true" @mouseout="resetIcon" v-if="content.code">
-      <button v-show="showCopyIconCode" class="border-2 border-gray-600 h-7 w-6 mt-2 mr-2" @click="copyCode(content.code)" title="Copiar contenido">
-        <i v-if="copied" class="fa-solid fa-check text-green-400"></i>
-        <i v-else class="fa-regular fa-copy text-gray-600"></i>
+    <div class="bg-customGray pb-4 flex md:flex-row-reverse" @mouseenter="showCopyIconCode = true" @mouseleave="resetIcon(`btn-${index+100}`)" v-if="content.code">
+      <button :class="`border-2 border-gray-600 h-7 w-6 mt-2 mr-2 btn-${index+100} ${!showCopyIconCode ? 'block md:hidden' : 'block'}`" @click="copyCode(content.code,`btn-${index+100}`)" title="Copiar contenido">
+        <i class="fa-regular fa-copy text-gray-600"></i>
       </button>
 
       <pre class="whitespace-pre flex-grow">
@@ -50,28 +48,47 @@ import '@fortawesome/fontawesome-free/css/all.css'
 
 export default {
   // Pasamos el contenido como una prop
-  props: ['content'],
+  props: ['content', 'index'],
   //mounted se ejecuta cuando el componente se ha montado en el DOM
   mounted() {
-    console.log(this.content.code);
+    //console.log(this.index);
   },
   //methods sirve para definir métodos que se pueden usar en este componente
   methods: {
-    async copyCode(code) {
+    async copyCode(code, btnClass) {
+      const element = document.querySelector(`.${btnClass}`);
+        if (element) {
+          element.innerHTML = '<i class="fa-solid fa-check text-green-400"></i>' ;
+        }
       try {
         await navigator.clipboard.writeText(code);
         this.copied = true;
         setTimeout(() => {
           this.copied = false;
+          element.innerHTML = '<i class="fa-regular fa-copy text-gray-600"></i>';
         }, 1000);
       } catch (err) {
         console.error('Error al copiar el código: ', err);
       }
     },
-    resetIcon() {
+    resetIcon(btnClass) {
       this.showCopyIconCode = false;
       this.showCopyIconRequest = false;
       this.copied = false;
+      const element = document.querySelector(`.${btnClass}`);
+        if (element) {
+          element.innerHTML = '<i class="fa-regular fa-copy text-gray-600"></i>' ;
+        }
+    },
+    show(copied, btnClass) {
+      
+      this.$nextTick(() => {
+        const element = document.querySelector(`.${btnClass}`);
+        if (element) {
+          element.innerHTML = "Copiado";
+        }
+      });
+      
     },
   },
   //data sirve para definir datos que se pueden usar en este componente
